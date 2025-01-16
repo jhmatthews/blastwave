@@ -1,6 +1,5 @@
 import numpy as np
 from matplotlib import pyplot as plt
-import scipy.integrate as integrate
 import astropy.io.ascii as io 
 from scipy import stats
 from utilities import util 

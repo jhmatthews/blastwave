@@ -1,7 +1,6 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from pluto_jm import pyPLUTO as pp
 from astropy.table import Table
 from astropy.io import ascii as io 
 import warnings

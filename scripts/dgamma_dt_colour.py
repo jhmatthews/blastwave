@@ -1,9 +1,5 @@
 import numpy as np
-import scipy
-from scipy.integrate import odeint
-from scipy.optimize import fsolve
 import matplotlib.pyplot as plt
-import jm_util
 from utilities import util 
 util.set_plot_defaults()
 
