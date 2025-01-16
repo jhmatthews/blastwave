@@ -3,13 +3,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 from pluto_jm import pyPLUTO as pp
 from astropy.table import Table
-from constants import MPROT
 from astropy.io import ascii as io 
 import warnings
 from utilities import util
 from utilities import blast_wave_util
 import blast_wave_util 
-from blast_wave_util import UNIT_RHO, UNIT_V, UNIT_VOLUME, C, UNIT_LENGTH, PARSEC
+from blast_wave_util import UNIT_RHO, UNIT_VOLUME, C, UNIT_LENGTH, MPROT
 warnings.filterwarnings("ignore")
 util.set_plot_defaults()
 

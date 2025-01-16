@@ -1,9 +1,9 @@
 import numpy as np
 from matplotlib import pyplot as plt
-from constants import * 
 import scipy.integrate as integrate
 from utilities import util
 from utilities import blast_wave_util
+from utilities.blast_wave_util import MPROT, C
 util.set_plot_defaults()
 # jm_util.set_cmap_cycler("RdYlBu_r", N=4)
 #util.set_ui_cycler("canada")

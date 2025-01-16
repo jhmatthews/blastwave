@@ -2,7 +2,6 @@ import numpy as np
 from matplotlib import pyplot as plt
 from utilities import util
 util.set_plot_defaults()
-import sys, os 
 from utilities.blast_wave_util import MPROT, C
 
 def R_RS(Gamma0, n, E0, Omega=np.pi/10):

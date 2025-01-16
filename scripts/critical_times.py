@@ -1,8 +1,8 @@
 import numpy as np
 from matplotlib import pyplot as plt
-from constants import * 
 from utilities import util
 from utilities import blast_wave_util
+from utilities.blast_wave_util import MPROT, C, PARSEC
 from astropy.table import Table
 from tqdm import tqdm
 util.set_plot_defaults()
