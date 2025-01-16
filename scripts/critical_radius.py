@@ -1,6 +1,5 @@
 import numpy as np
 from matplotlib import pyplot as plt
-import jetsimpy
 from constants import * 
 import scipy.integrate as integrate
 from utilities import util
