@@ -4,9 +4,7 @@ import scipy.integrate as integrate
 from utilities import util
 from utilities import blast_wave_util
 from utilities.blast_wave_util import MPROT, C
-util.set_plot_defaults()
-# jm_util.set_cmap_cycler("RdYlBu_r", N=4)
-#util.set_ui_cycler("canada")
+
 
 def make_figure(transparent=False):
     gammas = np.logspace(0,3,1000)
@@ -59,4 +57,5 @@ def make_figure(transparent=False):
     util.save_paper_figure("critical_radii.pdf", transparent=transparent)
 
 if __name__ == "__main__":
+    util.set_plot_defaults()
     make_figure(transparent=False)

@@ -9,7 +9,6 @@ from utilities import blast_wave_util
 import blast_wave_util 
 from blast_wave_util import UNIT_RHO, UNIT_VOLUME, C, UNIT_LENGTH, MPROT
 warnings.filterwarnings("ignore")
-util.set_plot_defaults()
 
 
 def make_figure(transparent=False):
@@ -64,4 +63,5 @@ def make_figure(transparent=False):
     util.save_paper_figure("shock_radii.pdf", fig = fig, transparent=transparent)
 
 if __name__ == "__main__":
+    util.set_plot_defaults()
     make_figure(transparent=False)

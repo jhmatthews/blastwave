@@ -5,8 +5,6 @@ from scipy import stats
 from utilities import util 
 from utilities import blast_wave_util 
 from utilities.blast_wave_util import MPROT, C
-util.set_plot_defaults()
-
 
 def make_figure(transparent=False):
     data = io.read("{}/grb_data.dat".format(util.g_DataDir))
@@ -45,4 +43,5 @@ def make_figure(transparent=False):
     util.save_paper_figure("lorentz.pdf", transparent=transparent)
 
 if __name__ == "__main__":
+    util.set_plot_defaults()
     make_figure()

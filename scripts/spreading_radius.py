@@ -3,8 +3,6 @@ from matplotlib import pyplot as plt
 from utilities import util
 from utilities import blast_wave_util
 
-util.set_plot_defaults()
-
 def make_figure(transparent=False):
     # Get fiducial parameters for the blast wave
     params = blast_wave_util.get_fiducial_parameters()
@@ -41,4 +39,5 @@ def make_figure(transparent=False):
     util.save_paper_figure("spreading_radius.pdf", transparent=transparent)
 
 if __name__ == "__main__":
+    util.set_plot_defaults()
     make_figure(transparent=False)

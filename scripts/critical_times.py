@@ -5,8 +5,6 @@ from utilities import blast_wave_util
 from utilities.blast_wave_util import MPROT, C, PARSEC
 from astropy.table import Table
 from tqdm import tqdm
-util.set_plot_defaults()
-util.set_ui_cycler("british")
 
         
 def get_critical_times(gammas = np.logspace(0.1,3,100), angles = [60.0, 3.0], energies = [1e45,1e45]):
@@ -64,6 +62,7 @@ def get_critical_times(gammas = np.logspace(0.1,3,100), angles = [60.0, 3.0], en
     return (tcrit_all)
 
 def make_figure(load = True, transparent=False):
+    util.set_ui_cycler("british")
     gammas = np.logspace(0.01,3,100)
     if load:
         tcrit_xrb = Table.read("{}/xrb_tcrits.dat".format(util.g_DataDir), format="ascii.fixed_width_two_line")
@@ -109,4 +108,5 @@ def make_figure(load = True, transparent=False):
     util.save_paper_figure("times.pdf", transparent=transparent)
 
 if __name__ == "__main__":
+    util.set_plot_defaults()
     make_figure(load = True, transparent=False)

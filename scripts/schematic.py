@@ -7,8 +7,6 @@ import cmasher as cmr
 from astropy.table import Table
 from blast_wave_util import UNIT_RHO, UNIT_V, UNIT_VOLUME, C, UNIT_LENGTH, PARSEC
 
-util.set_ui_cycler("british")
-util.set_plot_defaults()
 
 def make_figure(load = True, log=False):
     """
@@ -48,7 +46,8 @@ def make_figure(load = True, log=False):
     To create and save the schematic plot with logarithmic scaling and recompute data:
     >>> make_figure(load=False, log=True)
     """
-
+    util.set_ui_cycler("british")
+    
     # Get fiducial parameters for the blast wave
     params = blast_wave_util.get_fiducial_parameters()
 
@@ -182,5 +181,6 @@ def make_figure(load = True, log=False):
         fig.savefig("schematic_transp.png", dpi=300, transparent=True)
 
 if __name__ == "__main__":
+    util.set_plot_defaults()
     make_figure(load = False, log=True)
     #make_figure(load = True, log=False)

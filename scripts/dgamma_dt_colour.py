@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from utilities import util 
-util.set_plot_defaults()
 
 def make_figure(transparent=False):
     plt.rcParams["lines.linewidth"] = 4
@@ -61,4 +60,5 @@ def make_figure(transparent=False):
     util.save_paper_figure("dgamma_dt.pdf", transparent=transparent)
 
 if __name__ == "__main__":
+    util.set_plot_defaults()
     make_figure(transparent=False)  

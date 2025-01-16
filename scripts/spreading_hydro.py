@@ -8,8 +8,6 @@ from utilities import util
 from utilities import blast_wave_util
 from blast_wave_util import C, UNIT_LENGTH
 warnings.filterwarnings("ignore")
-util.set_plot_defaults()
-util.set_ui_cycler("dark")
 
 def make_figure(transparent=False):
     """
@@ -28,6 +26,8 @@ def make_figure(transparent=False):
     10. Set axis labels, limits, and add legend.
     11. Adjust layout and save figure as "spreading_hydro.pdf".
     """
+    util.set_ui_cycler("dark")
+    
     # Get fiducial parameters for the blast wave
     params = blast_wave_util.get_fiducial_parameters()
 
@@ -88,4 +88,5 @@ def make_figure(transparent=False):
     util.save_paper_figure("spreading_hydro.pdf", transparent=transparent)
 
 if __name__ == "__main__":
+    util.set_plot_defaults()
     make_figure(transparent=False)
