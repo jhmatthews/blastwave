@@ -47,7 +47,7 @@ def make_figure(load = True, log=False):
     >>> make_figure(load=False, log=True)
     """
     util.set_ui_cycler("british")
-    
+
     # Get fiducial parameters for the blast wave
     params = blast_wave_util.get_fiducial_parameters()
 
@@ -62,22 +62,21 @@ def make_figure(load = True, log=False):
     phi = params["phi"]
     omega = 2.0 * np.pi * (1.0 - np.cos(np.radians(params["phi"])))
 
-    print ("PHI", phi)
+    #print ("PHI", phi)
     pc_to_cm = 3.086e18
 
     gammas = [params["gamma0"],100]
     angles = [60.0, 1e-10]
     E0s = [np.log10(params["E0"]),51.0]
     cmap = "Blues"
-    cmaps = [cmap, cmap]
     tmaxes = [4000,100000]
-    tmaxes = [100,100]
-    titles = [r"XRB, $\Gamma_0 \approx 2$", r"GRB, $\Gamma_0 \approx 100$"]
-    titles = [r"XRB", r"GRB"]
+    colors = [util.default[6], util.default[0]]
+    #tmaxes = [100,100]
 
-    fig, ax = plt.subplots(figsize=(8,4), ncols = 2)
+
+    fig, ax = plt.subplots(figsize=(8,4.5), ncols = 2)
     for i, Gamma0 in enumerate(gammas):
-        print ("Making plot for gamma0 {}".format(Gamma0))
+        #print ("Making plot for gamma0 {}".format(Gamma0))
         E0 = E0s[i]
         theta_i = angles[i]
         theta_rad = np.radians(angles[i])
@@ -85,8 +84,9 @@ def make_figure(load = True, log=False):
         data = dict()
 
         if load:
-            data = Table.read("schematic_data_{:d}.dat".format(i), format="ascii.fixed_width_two_line")
+            data = Table.read("{}/schematic_data_{:d}.dat".format(util.g_DataDir, i), format="ascii.fixed_width_two_line")
         else:
+            print ("Computing data for gamma0 {}".format(Gamma0))
             times, ang_sep_true_app, distance = blast_wave_util.get_distance_over_time(Gamma0, E0, theta_i, dkpc=dkpc, n0=n0, phi=phi, tmax=tmaxes[i], log_times=False, ntimes=10000)
             data["times"] = times - 55200
             data["distance"] = distance
@@ -105,7 +105,7 @@ def make_figure(load = True, log=False):
         l = (3.0 * blast.E0 / C / C / blast.rho / omega) ** (1./3.)
         #print (blast.E0, E0)
 
-        ax[i].plot(data["times"], data["distance"]/l, label="$\Gamma_0 = {}, $\theta={}$".format(Gamma0, theta_i), c="C{:d}".format(i), lw=4)
+        ax[i].plot(data["times"], data["distance"]/l, label=r"$\Gamma_0 = {}, $\theta={}$".format(Gamma0, theta_i), c=colors[i], lw=4)
 
 
         blast.set_radii()
@@ -130,7 +130,7 @@ def make_figure(load = True, log=False):
             gradient = ax[i].imshow(np.log10(betagamma[select][::2]).reshape(1, -1), cmap=cmr.fusion_r, aspect='auto', interpolation="gaussian",
                         extent=[verts[:, 0].min(), verts[:, 0].max(), verts[:, 1].min(), verts[:, 1].max()], vmax=1, vmin=-1, alpha=0.8)
         gradient.set_clip_path(polygon.get_paths()[0], transform=ax[i].transData)
-        print ("HERE")
+
 
         colours = [util.default[3], "k"]
         t0 = 0
@@ -138,24 +138,21 @@ def make_figure(load = True, log=False):
             xx = data["times"]
             select = (xx <= tcrit[key]) * (xx >= t0)
             xx = xx[select]
-
             ax[i].vlines([tcrit[key]], 0,  blast.__dict__[key]/l, color=colours[j], zorder=5, ls="--")
             ax[i].scatter(tcrit[key], blast.__dict__[key]/l, c=colours[j], zorder=5, s=80)
-            #if j == 0:
-             #   ax[i].fill_between(xx, y1=0, y2=data["distance"][select]/l, color=colours[j], alpha=0.4)
             t0 = tcrit[key]
 
         ax[i].set_xlim(0,np.min((tmaxes[i], tmax)))
-        #if log:
-            #if i == 0:
-            #    ax[i].set_xlim(0,1000.0)
-            #else:
-            #    ax[i].set_xlim(0,90000.0)
-        #plt.ylim(0,20)
-        ax[i].set_ylim(0,2)
+
+        ax[i].set_ylim(0,1.99)
         ax[i].set_xlabel(r"$t~({\rm days})$", fontsize=20)
         if i == 0: 
-            ax[i].set_ylabel(r"$R/l$", fontsize=20)
+            if log:
+                ax[i].set_ylabel(r"$R/l$", fontsize=20, labelpad=-2)
+            else:
+                ax[i].set_ylabel(r"$R/l$", fontsize=20)
+        else:
+            ax[i].set_yticklabels([])
 
         #ax[i].set_title(titles[i])
         if log:
@@ -169,18 +166,26 @@ def make_figure(load = True, log=False):
                 ax[i].set_xlim(1,3e3)
             else:
                 ax[i].set_xlim(0,100000.0)
+                ax[i].set_yticklabels([])
             #ax[i].set_xlim(0.01,np.min((tmaxes[i], tmax))*10)
         #ax[i].text(0.80,4,"Sedov-Taylor",rotation=90,ha="center", va="center")
+        # Add a colorbar
+        if i == 0:
+            cbar_ax = fig.add_axes([0.46, 0.085, 0.15, 0.03])
+            cbar = fig.colorbar(gradient, cax=cbar_ax, orientation='horizontal', extend='both')
+            cbar.set_label(r'$\log_{10}(\beta\Gamma)$', fontsize=12, labelpad=-4)
+            cbar.ax.tick_params(labelsize=12)
 
-    fig.tight_layout(pad=0.05)
+    #fig.tight_layout(pad=0.1)
+    plt.subplots_adjust(left=0.1, right=0.98, top=0.98, bottom=0.18, wspace=0.05)
     if log:
-        fig.savefig("log_schematic.png", dpi=300)
-        fig.savefig("log_schematic_transp.png", dpi=300, transparent=True)
+        util.save_paper_figure("log_schematic.png", dpi=300)
+        #fig.savefig("log_schematic_transp.png", dpi=300, transparent=True)
     else:
-        fig.savefig("schematic.png", dpi=300)
-        fig.savefig("schematic_transp.png", dpi=300, transparent=True)
+        util.save_paper_figure("schematic.png", dpi=300)
+        #fig.savefig("schematic_transp.png", dpi=300, transparent=True)
 
 if __name__ == "__main__":
     util.set_plot_defaults()
-    make_figure(load = False, log=True)
-    #make_figure(load = True, log=False)
+    make_figure(load = True, log=True)
+    make_figure(load = True, log=False)

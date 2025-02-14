@@ -33,7 +33,7 @@ def get_fiducial_parameters(fname = "{}/fiducial.txt".format(util.g_SimDir)):
 def get_distance_over_time(Gamma0, E0, theta_i, 
                            phi=1.5, delta = 1.0, zeta=1.0, dkpc = 3.1, R_cavity_pc=1.0, 
                            R0 = 0.0, n0=0.002, t_ej = 0.0, tmax=1000, log_times=False, res=0.01, 
-                           ntimes=1000, mass_swept_func=None):
+                           ntimes=1000, mass_swept_func=None, app_or_rec='app'):
     p=[Gamma0,E0,theta_i,phi,R_cavity_pc,delta,zeta,dkpc,R0,n0,t_ej]
     d_cm = dkpc * 1000.0 * PARSEC
     #times = np.arange(p[10]+55200,p[10]+55200+tmax,0.01)
@@ -44,7 +44,7 @@ def get_distance_over_time(Gamma0, E0, theta_i,
 
     #print (times, E0)
     # calculate the apparent angular distance over time 
-    ang_sep_true_app=francesco.total_motion(p,times,'app', mass_swept_func=mass_swept_func)
+    ang_sep_true_app=francesco.total_motion(p,times,app_or_rec, mass_swept_func=mass_swept_func)
     theta_rad = np.radians(theta_i)
     #factor = (np.sin(theta_rad) / d_cm) * (3600.0 * 180.0 / np.pi)
     # converts angular separation in arcsec to radians

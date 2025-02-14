@@ -30,7 +30,7 @@ def make_figure(transparent=False):
     #
     # plt.title("Approaching jets")
     #util.set_cmap_cycler("viridis_r", N=7)
-    plt.plot(gmm, dRdt2, label=r"$\beta_{\rm app} = 2 \Gamma^2$", ls=(0, (3, 1, 1, 1)), c="k", zorder=5)
+    plt.plot(gmm, dRdt2, label=r"$2 \Gamma^2$", ls=(0, (3, 1, 1, 1)), c="k", zorder=5)
 
     # theta_mesh = np.degrees(np.arccos(costheta_mesh))
     #plt.pcolormesh(gmm_mesh, dRdt_mesh, theta_mesh, alpha=0.5)

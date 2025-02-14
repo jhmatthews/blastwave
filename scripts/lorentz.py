@@ -14,27 +14,35 @@ def make_figure(transparent=False):
 
     francesco = [2.6, 1.6, 3.4, 1.85]
 
-    select = data["Lower_Limit"] == "n"
-    plt.hist(data["gamma"][select], density=False, color=util.default[0], alpha=0.6, bins=bins, edgecolor=util.default[0], label=r"$\Gamma_0$, GRBs, heterogenous methodologies (Table 1)")
+    select1 = data["Lower_Limit"] == "n"
+    plt.hist(data["gamma"], density=False, color=util.default[0], alpha=0.6, bins=bins, edgecolor=util.default[0], label=r"$\Gamma_0$, GRBs, lower limits (Table A2)")
+    
+    labels = [r"$\Gamma_0$, GRBs, lower limits (Table A2)",r"$\Gamma_0$, GRBs, heterogenous methodologies (Table A1)"]
+    select2 = data["Lower_Limit"] == "y"
+    plt.hist(data["gamma"][select1], density=False, color=util.default[0], alpha=1.0, edgecolor="k", bins=bins, label=r"$\Gamma_0$, GRBs, heterogenous methodologies (Table A1)", fill=True)
+
     #plt.hist(np.log10(data["gamma"][~select]), density=True, color=util.default[0], alpha=0.6, bins=bins)
-    kde = stats.gaussian_kde(np.log10(data["gamma"][select]))
-    xx = np.linspace(0, 3.5, 300)
+    #kde = stats.gaussian_kde(np.log10(data["gamma"][select]))
+    #xx = np.linspace(0, 3.5, 300)
     #plt.plot(xx, kde(xx), color=util.default[0])
     #plt.fill_between(xx, y1=0, y2= kde(xx), color=util.default[0], alpha=0.5, label="GRBs")
     xx = np.logspace(1.5, 3, 100)
     plt.fill_between(xx, y1=0, y2=9, color=util.default[0], alpha=0.2, label=None)
 
-    plt.hist(data2["Gamma"], density=False, color=util.default[6], alpha=0.5, bins=bins, edgecolor=util.default[6], label=r"$\Gamma$, XRBs, lower limits from $\beta_{\rm app}$ (Fender \& Motta, in prep)")
-    plt.hist(francesco, density=False, color=util.default[6], alpha=1, bins=bins, edgecolor="k", label=r"$\Gamma_0$, XRBs, kinematic modelling (Carotenuto 2022,2024)")
+    full_data = np.concatenate([data2["Gamma"], francesco])
+
+    plt.hist(full_data, density=False, color=util.default[6], alpha=0.6, bins=bins, edgecolor=util.default[6], label=r"$\Gamma$, XRBs, lower limits from $\beta_{\rm app}$ (Fender \& Motta, sub.)")
+    plt.hist(francesco, density=False, color=util.default[6], alpha=1, bins=bins, edgecolor="k", label=r"$\Gamma_0$, XRBs, kinematic modelling (Carotenuto$+$ 2022,2024)")
+    plt.scatter(3.4,1.3,marker=">", color=util.default[6])
     plt.gca().set_xscale("log")
-    kde = stats.gaussian_kde(np.log10(data2["Gamma"]))
+    #kde = stats.gaussian_kde(np.log10(data2["Gamma"]))
     xx = np.linspace(0, 3.5, 300)
     #plt.fill_between(xx, y1=0, y2= kde(xx), color=util.default[6], alpha=0.5, label="XRBs")
 
     xx = np.logspace(np.log10(1.5), np.log10(5), 100)
     plt.fill_between(xx, y1=0, y2=9, color=util.default[6], alpha=0.2, label=None, zorder=0)
 
-    plt.xlabel("$\log \Gamma$ or $\log \Gamma_0$", fontsize=20)
+    plt.xlabel(r"$\log \Gamma$ or $\log \Gamma_0$", fontsize=20)
     plt.ylabel("Number of sources", fontsize=16)
     plt.legend()
     plt.xlim(1,3000)

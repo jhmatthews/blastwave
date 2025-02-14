@@ -44,11 +44,17 @@ def get_critical_times(gammas = np.logspace(0.1,3,100), angles = [60.0, 3.0], en
 
         tcrit_all[j]["gamma"] = gammas
 
+        if theta_i < 0.0:
+            app_or_rec = 'rec'
+            theta_i = -theta_i
+        else:
+            app_or_rec = 'app'
+
         for i, Gamma0 in enumerate(tqdm(gammas)):
             #print (i)
             logE0 = np.log10(energies[j])
             E0 = energies[j]
-            times, ang_sep_true_app, distances = blast_wave_util.get_distance_over_time(Gamma0, logE0, theta_i, dkpc=dkpc, n0=n0, phi=phi)
+            times, ang_sep_true_app, distances = blast_wave_util.get_distance_over_time(Gamma0, logE0, theta_i, dkpc=dkpc, n0=n0, phi=phi, app_or_rec=app_or_rec)
 
             blast = blast_wave_util.blast_wave(Gamma0, n0, E0, omega)
             l = (3.0 * blast.E0 / C / C / blast.rho) ** (1./3.)
@@ -67,12 +73,16 @@ def make_figure(load = True, transparent=False):
     if load:
         tcrit_xrb = Table.read("{}/xrb_tcrits.dat".format(util.g_DataDir), format="ascii.fixed_width_two_line")
         tcrit_grb = Table.read("{}/grb_tcrits.dat".format(util.g_DataDir), format="ascii.fixed_width_two_line")
+        tcrit_reced = Table.read("{}/xrb_receding_tcrits.dat".format(util.g_DataDir), format="ascii.fixed_width_two_line")
     else:
-        tcrit_all = get_critical_times(gammas = gammas, angles = [60.0, 0.01], energies = [1e45,1e45])
-        blast_wave_util.save_dict_to_astropy_table(tcrit_all[0], "xrb_tcrits.dat", format="ascii.fixed_width_two_line")
-        blast_wave_util.save_dict_to_astropy_table(tcrit_all[1], "grb_tcrits.dat", format="ascii.fixed_width_two_line")
+        #tcrit_all = get_critical_times(gammas = gammas, angles = [60.0, 0.01], energies = [1e45,1e45])
+        tcrit_all = get_critical_times(gammas = gammas, angles = [60.0, 0.01, -60.0], energies = [1e45,1e45,1e45])
+        blast_wave_util.save_dict_to_astropy_table(tcrit_all[0], "{}/xrb_tcrits.dat".format(util.g_DataDir), format="ascii.fixed_width_two_line")
+        blast_wave_util.save_dict_to_astropy_table(tcrit_all[1], "{}/grb_tcrits.dat".format(util.g_DataDir), format="ascii.fixed_width_two_line")
+        blast_wave_util.save_dict_to_astropy_table(tcrit_all[2], "{}/xrb_receding_tcrits.dat".format(util.g_DataDir), format="ascii.fixed_width_two_line")
         tcrit_xrb = tcrit_all[0]
         tcrit_grb = tcrit_all[1]
+        tcrit_reced = tcrit_all[2]
 
     rr = np.zeros_like(gammas)
     for i,g in enumerate(gammas):
@@ -88,11 +98,20 @@ def make_figure(load = True, transparent=False):
     ##plt.plot(gammas, tcrit_all[1]["R_RS"]/tcrit_all[1]["R_sw"], label=r"$t_{\rm RS}/ t(l_\Omega)$, On-axis")
     #plt.plot(gammas, gammas**(-(2.0/3.0)) * 100)
     #plt.plot(gammas, (1.0-np.exp(gammas))*100)
-    plt.plot(tcrit_xrb["gamma"], tcrit_xrb ["R_RS"], label=r"``XRB'': $10^{45}~{\rm erg}, 60^\circ$", lw=3, c="C3")
-    plt.plot(tcrit_xrb["gamma"], 100.0*tcrit_xrb ["R_RS"], label=r"``Far off-axis GRB'': $10^{51}~{\rm erg}, 60^\circ$", lw=3, c="C1")
+    plt.plot(tcrit_xrb["gamma"], tcrit_xrb ["R_RS"], label=r"``XRB'': $10^{45}~{\rm erg}, 60^\circ$, Approaching", lw=3, c="C3")
+    plt.plot(tcrit_reced["gamma"], tcrit_reced ["R_RS"], label=r"``XRB'': $10^{45}~{\rm erg}, 60^\circ$, Receding", lw=3, c="C3", ls="--")
+    plt.plot(tcrit_xrb["gamma"], 100.0*tcrit_xrb ["R_RS"], label=r"``Far off-axis GRB'': $10^{51}~{\rm erg}, 60^\circ$", lw=3, c="C4")
+    beta = np.sqrt(1.0 - (1.0/tcrit_xrb["gamma"]/tcrit_xrb["gamma"]))
+    factor1 = 1.0 - beta * np.cos(np.radians(60))
+    factor2 = 1.0 + beta * np.cos(np.radians(60))
 
+    plt.plot(tcrit_xrb["gamma"], tcrit_reced ["R_RS"] / tcrit_xrb ["R_RS"])
+    plt.plot(tcrit_xrb["gamma"], factor2 / factor1, ls =":")
+
+    print (tcrit_reced ["R_RS"]/tcrit_xrb ["R_RS"])
+    print (blast_wave_util.doppler(tcrit_reced["gamma"], np.radians(60)))
     select = (np.isinf(tcrit_grb ["R_RS"]) == False) * (np.isnan(tcrit_grb ["R_RS"]) == False) * (tcrit_grb ["R_RS"] > 0)
-    plt.plot(tcrit_grb["gamma"][select], 100.0*tcrit_grb ["R_RS"][select], label=r"``Off-axis GRB'': $10^{51}~{\rm erg}, 3^\circ$", lw=3, c="C4")
+    #plt.plot(tcrit_grb["gamma"][select], 100.0*tcrit_grb ["R_RS"][select], label=r"``Off-axis GRB'': $10^{51}~{\rm erg}, 3^\circ$", lw=3, c="C4")
 
     plt.plot(gammas, rr / (2.0 * gammas * gammas * C) / (86400.0), c="C0", lw=3, label=r"``On-axis GRB'': $10^{51}~{\rm erg}, 0^\circ$")
     plt.xlabel(r"$\Gamma_0$", fontsize=20)
@@ -102,7 +121,7 @@ def make_figure(load = True, transparent=False):
     plt.grid(ls=":")
     plt.ylim(0.001,9999)
     plt.xlim(1,1000)
-    plt.legend(fontsize=12)
+    plt.legend(fontsize=10)
     plt.loglog()
     plt.tight_layout(pad=0.05)
     util.save_paper_figure("times.pdf", transparent=transparent)
