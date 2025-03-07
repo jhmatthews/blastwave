@@ -280,4 +280,16 @@ def get_mappable(N, vmin=0, vmax=1, cmap_name="Spectral", return_func=False):
 
 
 
+def add_shaded_bands(ax = None, y1=None, y2=None, grb=True):
+    if ax is None:
+        ax = plt.gca() 
+    if y1 is None:
+        y1, _ = ax.get_ylim()
+    if y2 is None:
+        _, y2 = ax.get_ylim()
 
+    ax.fill_between([1.5,8],y1=y1,y2=y2,alpha=0.3, color=default[6])
+    if grb:
+        ax.fill_between([100,1000],y1=y1,y2=y2,alpha=0.2, color=default[0])
+
+    return

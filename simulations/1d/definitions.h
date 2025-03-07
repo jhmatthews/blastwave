@@ -32,6 +32,6 @@
 #define  LIMITER                        MC_LIM
 #define  UNIT_VELOCITY                  CONST_c
 #define  UNIT_LENGTH                    1e15
-#define  SHOCK_FLATTENING               MULTID
+#define  SHOCK_FLATTENING               NO
 
 /* [End] user-defined constants (do not change this line) */

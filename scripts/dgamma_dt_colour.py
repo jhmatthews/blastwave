@@ -35,7 +35,7 @@ def make_figure(transparent=False):
     # theta_mesh = np.degrees(np.arccos(costheta_mesh))
     #plt.pcolormesh(gmm_mesh, dRdt_mesh, theta_mesh, alpha=0.5)
     thetas = (0.25,1,3,10,30,60,90)
-    mappable, colors, mappable.to_rgba = util.get_mappable(len(thetas)+1, vmin=0, vmax=1, cmap_name = "viridis", return_func = True)
+    mappable, colors, mappable.to_rgba = util.get_mappable(len(thetas)+1, vmin=0, vmax=1, cmap_name = "viridis_r", return_func = True)
 
     plt.plot(gmm, dRdt1, label=r"On-axis full ($\theta=0^\circ$)", c=colors[0])
     for i,theta in enumerate(thetas):
@@ -46,8 +46,8 @@ def make_figure(transparent=False):
 
     ylims = (0.1,1e6)
 
-    plt.fill_between([2,5],y1=ylims[0],y2=ylims[1],alpha=0.3, color="#e377c2")
-    plt.fill_between([100,1000],y1=ylims[0],y2=ylims[1],alpha=0.2, color="C0")
+    #plt.fill_between([1.5,8],y1=ylims[0],y2=ylims[1],alpha=0.3, color="#e377c2")
+    #plt.fill_between([100,1000],y1=ylims[0],y2=ylims[1],alpha=0.2, color="C0")
 
     plt.ylabel(r"$c^{-1} dR/dt$", fontsize=20)
     plt.xlabel("$\Gamma$", fontsize=20)
@@ -56,6 +56,7 @@ def make_figure(transparent=False):
             labelspacing=0.2, columnspacing=1.0, handlelength=1.5)
     plt.xlim(1,1000)
     plt.ylim(ylims[0], ylims[1])
+    util.add_shaded_bands(ax=plt.gca())
     plt.tight_layout(pad=0.05)
     util.save_paper_figure("dgamma_dt.pdf", transparent=transparent)
 

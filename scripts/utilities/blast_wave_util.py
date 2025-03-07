@@ -33,8 +33,9 @@ def get_fiducial_parameters(fname = "{}/fiducial.txt".format(util.g_SimDir)):
 def get_distance_over_time(Gamma0, E0, theta_i, 
                            phi=1.5, delta = 1.0, zeta=1.0, dkpc = 3.1, R_cavity_pc=1.0, 
                            R0 = 0.0, n0=0.002, t_ej = 0.0, tmax=1000, log_times=False, res=0.01, 
-                           ntimes=1000, mass_swept_func=None, app_or_rec='app'):
+                           ntimes=1000, mass_swept_func=None, app_or_rec='app', return_p=False):
     p=[Gamma0,E0,theta_i,phi,R_cavity_pc,delta,zeta,dkpc,R0,n0,t_ej]
+    pars_app = [Gamma0, E0, R_cavity_pc, delta, zeta, np.radians(phi), n0, app_or_rec]
     d_cm = dkpc * 1000.0 * PARSEC
     #times = np.arange(p[10]+55200,p[10]+55200+tmax,0.01)
     if log_times:
@@ -55,7 +56,10 @@ def get_distance_over_time(Gamma0, E0, theta_i,
         # converts angular distance in radians to physical distance in cm
         distance = ang_sep_radians * d_cm / np.sin(theta_rad)
 
-    return (times, ang_sep_true_app, distance)
+    if return_p:
+        return (times, ang_sep_true_app, distance, pars_app)
+    else:
+        return (times, ang_sep_true_app, distance)
 
 def save_dict_to_astropy_table(data_dict, filename, format="ascii.fixed_width_two_line"):
     """

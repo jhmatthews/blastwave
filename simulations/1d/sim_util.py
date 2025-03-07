@@ -2,7 +2,7 @@
 from constants import MPROT
 import numpy as np 
 import sys 
-sys.path.append("../../utilities")
+sys.path.append("../../scripts/utilities")
 import blast_wave_util 
 from blast_wave_util import UNIT_RHO, UNIT_V, UNIT_VOLUME, C, UNIT_LENGTH, PARSEC, UNIT_TIME, length_conversion
 

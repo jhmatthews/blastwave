@@ -77,11 +77,16 @@ def get_shock_radii_and_properties(D, data, i):
         print ("blob mass is {}".format(data["blob_mass"][i] * UNIT_RHO * UNIT_VOLUME))
     data["critical_mass"][i] = np.sum(D.rho[D.select_blob] * D.volume[D.select_blob] / np.max(D.lorentz))
     data["maxgamma"][i] = np.max(D.lorentz)
+    data["maxgamma"][i] = np.max(D.lorentz)
+    data["maxgamma_forward"][i] = np.max(D.lorentz_forward)
+    data["maxgamma_blob"][i] = np.max(D.lorentz[D.select_blob])
     data["total_mass"][i] = np.sum(D.lorentz * D.rho * D.volume)
 
     data["total_energy"][i] = np.sum(total_energy * D.volume)
     data["blob_energy"][i] = np.sum(total_energy[D.select_blob] * D.volume[D.select_blob])
     data["blob_kinetic"][i] = np.sum(kinetic_energy[D.select_blob] * D.volume[D.select_blob])
+    if i == 0:
+        print ("blob_kinetic is {} {}".format(data["blob_kinetic"][i] * UNIT_RHO * C * C * UNIT_VOLUME, np.sum(D.volume[D.select_blob] * UNIT_VOLUME)))
     data["total_lum"][i] = np.sum(emiss * D.volume)
     data["reverse_lum"][i] = np.sum(emiss * D.volume * D.tr1)
     data["reverse_lum2"][i] = np.sum(emiss[D.select_blob] * D.volume[D.select_blob])
@@ -113,7 +118,7 @@ def init_data_table(nrange):
     for key in ["blob_mass", "ism_mass", "r_forward", "r_reverse", "total_mass", 
                 "E_blob", "E_ism", "blob_energy", "ism_energy", "total_energy", 
                 "ism_rest","total_lum","reverse_lum","reverse_lum2","reverse_lum3", 
-                "blob_mass2", "critical_mass", "maxgamma", "blob_kinetic", "swept_up"]:
+                "blob_mass2", "critical_mass", "maxgamma", "blob_kinetic", "swept_up", "maxgamma_forward", "maxgamma_blob"]:
         data[key] = np.zeros(ndo)
     return (data)
 
@@ -135,6 +140,7 @@ def read_pluto_sim(nn, wdir, datatype="float", printout=False):
     ddx = np.diff(D.x1)[0]
     D.volume = 4.0 * np.pi * D.x1 * D.x1 * ddx
     D.lorentz = call_gm(D.vx1 * D.vx1)
+    D.lorentz_forward = D.lorentz * (D.vx1 > 0)
     D.select_ism = (D.prs > 1e-5) * (D.tr1 < 1e-2)
     D.select_ism_all = (D.vx1 > 1e-5) 
     D.select_blob = (D.tr1 > 1e-2)
@@ -228,6 +234,8 @@ def make_summary_plot(data, D, i, wdir, gamma0=2.5):
     for key in ["blob_mass", "ism_mass"]:
         plt.plot(data["time"][:i+1], data[key][:i+1], label=key)
         plt.scatter(data["time"][i], data[key][i])
+
+    plt.plot(data["time"][:i+1], data["blob_mass"][0]/data["maxgamma"][:i+1], label=key)
     plt.loglog()
 
     plt.subplot(326)
@@ -298,4 +306,5 @@ print ("Plotting and saving profiles for katie sim analogue")
 #plot_and_save_profiles("out_gmm1.2/", nrange, load=False, gamma0=1.2, plot=False)   
 #plot_and_save_profiles("katie_gmm5/", nrange, load=False, gamma0=5, plot=True)        
 plot_and_save_profiles("out_fiducial/", nrange, load=False, gamma0=2.5, plot=False)  
+# plot_and_save_profiles("out_fiducial_log/", nrange, load=False, gamma0=2.5, plot=False) 
             

@@ -8,7 +8,7 @@ from utilities.blast_wave_util import MPROT, C
 
 def make_figure(transparent=False):
     gammas = np.logspace(0,3,1000)
-    E0 = 1e45
+    E0 = 1e44
     n = 1.0
     rho = n * MPROT
     omega = 1.0
@@ -34,17 +34,19 @@ def make_figure(transparent=False):
 
 
     # plt.fill_between([2,5],y1=6e-3,y2=20,alpha=0.3, color="#e377c2")
-    plt.fill_between([2,5],y1=0.001,y2=10000,alpha=0.3, color=util.default[6])
-    plt.fill_between([100,1000],y1=0.001,y2=10000,alpha=0.2, color=util.default[0])
+    # util.add_shaded_bands(ax=plt.gca())
+    # plt.fill_between([1.5,8],y1=0.001,y2=10000,alpha=0.3, color=util.default[6])
+    # plt.fill_between([100,1000],y1=0.001,y2=10000,alpha=0.2, color=util.default[0])
     plt.loglog()
     plt.xlabel(r"$\Gamma_0$")
     plt.legend()
     plt.xlim(1,1000)
     plt.ylim(6e-3,20)
+    util.add_shaded_bands(ax=plt.gca())
 
     plt.subplot(122)
-    plt.fill_between([2,5],y1=0.001,y2=10000,alpha=0.3, color=util.default[6])
-    plt.fill_between([100,1000],y1=0.001,y2=10000,alpha=0.2, color=util.default[0])
+    #plt.fill_between([1.5,8],y1=0.001,y2=10000,alpha=0.3, color=util.default[6])
+    #lt.fill_between([100,1000],y1=0.001,y2=10000,alpha=0.2, color=util.default[0])
     plt.plot(gammas, blast.R_RS/blast.R_slow, label=r"$R_{\rm RS}/R_{\rm slow}$", c="C0", ls="-")
     plt.plot(gammas, blast.R_RS/blast.Rdiss0p1, label=r"$R_{\rm RS}/R_E~(f_E=0.1)$", c="C3", ls="-")
     plt.plot(gammas, blast.R_RS/blast.Rdiss0p5, label=r"$R_{\rm RS}/R_E~(f_E=0.5)$", c="C3", ls="--")
@@ -53,6 +55,7 @@ def make_figure(transparent=False):
     plt.legend()
     plt.xlim(1,1000)
     plt.ylim(6e-3,20)
+    util.add_shaded_bands(ax=plt.gca())
     plt.tight_layout(pad=0.05)
     util.save_paper_figure("critical_radii.pdf", transparent=transparent)
 

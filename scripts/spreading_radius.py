@@ -27,14 +27,15 @@ def make_figure(transparent=False):
         plt.plot(gammas, blast.__dict__["R_spread"]/blast.__dict__["R_RS"], label=r"$\phi = {}^\circ$".format( phi), ls="-", c=f"C{i}")
 
     plt.gca().axhline(1, c="k", ls="--")
-    plt.fill_between([2,5],y1=0.001,y2=10000,alpha=0.3, color=util.default[6])
-    plt.fill_between([100,1000],y1=0.001,y2=10000,alpha=0.2, color=util.default[0])
+    #plt.fill_between([2,5],y1=0.001,y2=10000,alpha=0.3, color=util.default[6])
+    #plt.fill_between([100,1000],y1=0.001,y2=10000,alpha=0.2, color=util.default[0])
     plt.loglog()
     plt.xlabel("$\Gamma_0$", fontsize=20)
     plt.ylabel(r"$R_\phi / R_{\rm RS}$", fontsize=20)
     plt.legend(ncol=1, fontsize=12)
     plt.xlim(1,1000)
     plt.ylim(6e-3,20)
+    util.add_shaded_bands(ax=plt.gca())
     plt.tight_layout(pad=0.05)
     util.save_paper_figure("spreading_radius.pdf", transparent=transparent)
 

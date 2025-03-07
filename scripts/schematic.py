@@ -113,6 +113,7 @@ def make_figure(load = True, log=False):
 
 
         betagamma = np.sqrt(1-1./data["gammas"]**2) * data["gammas"]
+        
 
         # create gamma colour coding 
         tmax = tcrit["R_slow"] * 1.2
@@ -141,6 +142,10 @@ def make_figure(load = True, log=False):
             ax[i].vlines([tcrit[key]], 0,  blast.__dict__[key]/l, color=colours[j], zorder=5, ls="--")
             ax[i].scatter(tcrit[key], blast.__dict__[key]/l, c=colours[j], zorder=5, s=80)
             t0 = tcrit[key]
+
+            if key == "R_slow":
+                icrit = np.argmin(np.fabs(xx - tcrit["R_slow"]))
+                print (betagamma[icrit])
 
         ax[i].set_xlim(0,np.min((tmaxes[i], tmax)))
 

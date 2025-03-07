@@ -2,6 +2,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from utilities import util
 from utilities.blast_wave_util import MPROT, C
+import matplotlib.colors as mpl_colors
 
 def R_RS(Gamma0, n, E0, Omega=np.pi/10):
     rho = n * MPROT 
@@ -31,23 +32,44 @@ def make_figure(transparent=False):
     #plt.pcolormesh(gg, tt, alpha)
     levels = np.array([0.1,0.3,1,3,10,30,100])
 
-    levels = 10.0 ** np.arange(-2,2,0.25)
+    levels = 10.0 ** np.arange(-1,2,0.25)
     #levels = np.array([0.1,0.3,1,3,10,30,100])
 
     fig = plt.figure(figsize=(5,4))
-    CS1 = plt.contourf(gg, tt, alpha, levels = levels, cmap="Blues")
-    cbar = plt.colorbar()
+    CS1 = plt.contourf(gg, tt, alpha, levels = levels, cmap="Blues", norm=mpl_colors.LogNorm(), linewidths=0)
+    cbar = plt.colorbar(extend="both")
+    cbar.ax.set_yticklabels(["{:.1f}".format(i) for i in levels])
 
     #plt.contour(gg, tt, alpha, levels = levels, colors="k", linewidths=0.5)
-    cbar.set_label(r"$\alpha_{\rm RS}$~(arcseconds)", fontsize=16, labelpad=-2)
+    cbar.set_label(r"$\alpha_{\rm RS}$~(arcsecs)", fontsize=16, labelpad=-2)
     plt.xlabel(r"$\Gamma_0$", fontsize=20)
     plt.ylabel(r"$\theta~(^\circ)$", fontsize=20)
     plt.contour(gg, tt, alpha, levels = (5.4,), colors=util.default[3])
+
+    cs = plt.contourf(gg, tt, alpha, hatches=["\\\\","\\"], levels = [4,5.4], colors =[util.default[3]], alpha=0.0)
+                                                                                
+    # New bit here that handles changing the color of hatches
+    colors = [util.default[3], "none"]
+    # For each level, we set the color of its hatch 
+    for i, collection in enumerate(cs.collections):
+        collection.set_edgecolor(colors[i % len(colors)])
+        #collection.set_elinwidth(3)
+    # Doing this also colors in the box around each level
+    # We can remove the colored line around the levels by setting the linewidth to 0
+    for collection in cs.collections:
+        collection.set_linewidth(0.)
     #plt.clabel(CS1, CS1.levels, inline=True, fmt=fmt, fontsize=10)
     #plt.colorbar()
     #plt.legend()
-    plt.text(5.5,60,"MeerKAT",rotation=82, color=util.default[3], fontsize=18)
+
+    plt.text(5.3,60,"MeerKAT",rotation=82, color=util.default[3], fontsize=18)
+
+    #plt.text(5.5,60,"MeerKAT",rotation=82, color=util.default[3], fontsize=18, arrowprops=dict(facecolor='black', arrowstyle='->'))
+    plt.annotate("More off-axis", (70,80), xytext=(70,30), xycoords='data', rotation=90, 
+                 arrowprops=dict(facecolor='black', arrowstyle='->'), ha="center", va="center",
+                 fontsize=18)
     plt.semilogx()
+    util.add_shaded_bands(ax=plt.gca(),grb=False)
     plt.tight_layout(pad=0.05)
     util.save_paper_figure("ang_sep_RS.pdf", fig = fig, transparent=transparent)
 

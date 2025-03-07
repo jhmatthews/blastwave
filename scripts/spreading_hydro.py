@@ -77,11 +77,11 @@ def make_figure(transparent=False):
     ax.scatter(data["time"][i_cross], ((data["r_forward"][i_cross]*(C * 86400.0))-(20.0 * UNIT_LENGTH))/l, c="k", label = "Point of RS crossing", zorder=3)
 
     # Set axis labels and limits and add a legend
-    ax.set_xlabel(r"$t$~(days)", fontsize=20)
+    ax.set_xlabel(r"$t_{\rm lab}$~(days)", fontsize=20)
     ax.set_ylabel(r"$R / l$, Forward shock", fontsize=20)
     ax.set_xlim(0,400)
-    ax.set_ylim(0,1.5)
-    ax.legend(frameon=False, fontsize=12, loc="upper left")
+    ax.set_ylim(0,2.2)
+    ax.legend(frameon=False, fontsize=14, loc="upper left")
 
     # Adjust layout and save the figure
     fig.tight_layout(pad=0.05)

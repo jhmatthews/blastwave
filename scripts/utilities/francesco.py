@@ -34,11 +34,11 @@ def R_ism(phi_jet,R_pc,delta,zeta,R_cavity_pc,n_ism):
 #The growing mass swept up by the jet, with the scaling factor absorbing the large numbers.
 #Before reaching the cavity radius R_cavity_pc, the jet moves in a an "empty" bubble with a density n_ism/delta.
 #After reaching R_cavity_pc (the cavity wall), we sum the mass swept up so far with the mass swept up in a normal n_ism ISM, after a jump of order delta in the ISM density
-def mass_swept_cavity_old(R_pc, R_cavity_pc, delta,zeta0,phi_jet,n_ism,flag, R0=40.0):
+def mass_swept_cavity_old(R_pc, R_cavity_pc, delta,zeta0,phi_jet,n_ism,flag, R0=20.0):
     c=3e10
     m_p = 1.672e-24
     pc_to_cm = 3.086e18
-    R0cubed = (R0 * 1.000e+15 / pc_to_cm)**3
+    R0cubed = (phi_jet)**2 * n_ism * ((R0 * 1.000e+15 / pc_to_cm)**3)
     #n_ism = 1e-3
     scaling_factor = (m_p*(c**2)*(np.pi/3)*pc_to_cm**3)
     if flag=='app':
@@ -64,7 +64,7 @@ def mass_swept_cavity(R_pc, R_cavity_pc, delta,zeta0,phi_jet,n_ism,flag):
     return scaling_factor*R_term
 
 
-def mass_swept_cavity2(R_pc,zeta0,phi_jet,n_ism,flag, R0=40.0):
+def mass_swept_cavity2(R_pc,zeta0,phi_jet,n_ism,flag, R0=20.0):
     c=3e10
     m_p = 1.672e-24
     pc_to_cm = 3.086e18
