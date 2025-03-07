@@ -36,7 +36,7 @@ def make_figure(transparent=False):
     #levels = np.array([0.1,0.3,1,3,10,30,100])
 
     fig = plt.figure(figsize=(5,4))
-    CS1 = plt.contourf(gg, tt, alpha, levels = levels, cmap="Blues", norm=mpl_colors.LogNorm(), linewidths=0)
+    CS1 = plt.contourf(gg, tt, alpha, levels = levels, cmap="Blues", norm=mpl_colors.LogNorm())
     cbar = plt.colorbar(extend="both")
     cbar.ax.set_yticklabels(["{:.1f}".format(i) for i in levels])
 
@@ -50,17 +50,15 @@ def make_figure(transparent=False):
                                                                                 
     # New bit here that handles changing the color of hatches
     colors = [util.default[3], "none"]
+
     # For each level, we set the color of its hatch 
-    for i, collection in enumerate(cs.collections):
-        collection.set_edgecolor(colors[i % len(colors)])
-        #collection.set_elinwidth(3)
+    #cs.set_edgecolor(colors[i % len(colors)])
+    cs.set_edgecolor(colors)
+ 
     # Doing this also colors in the box around each level
     # We can remove the colored line around the levels by setting the linewidth to 0
-    for collection in cs.collections:
-        collection.set_linewidth(0.)
-    #plt.clabel(CS1, CS1.levels, inline=True, fmt=fmt, fontsize=10)
-    #plt.colorbar()
-    #plt.legend()
+    cs.set_linewidth(0.)
+  
 
     plt.text(5.3,60,"MeerKAT",rotation=82, color=util.default[3], fontsize=18)
 
