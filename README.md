@@ -1,6 +1,7 @@
 blastwave 
 ============
 [![blastwave](https://github.com/jhmatthews/blastwave/actions/workflows/test_figures.yml/badge.svg)](https://github.com/jhmatthews/blastwave/actions/workflows/test_figures.yml)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.15011341.svg)](https://doi.org/10.5281/zenodo.15011341)
 
 This repository contains scripts and data for the paper 
 
