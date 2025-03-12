@@ -17,7 +17,7 @@ print("Using tex?", tex)
 util.set_plot_defaults(tex=tex)
 print ("----------------------------")
 
-list_of_modules = ["critical_radius", "critical_times", "lorentz", "dgamma_dt_colour", "spreading_hydro", 
+list_of_modules = ["critical_radius", "critical_times", "dgamma_dt_colour", "spreading_hydro", 
                    "spreading_radius", "ang_sep", "shock_radii"]
 
 for mod_name in list_of_modules:
