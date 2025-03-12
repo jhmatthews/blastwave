@@ -4,9 +4,7 @@ blastwave
 
 This repository contains scripts and data for the paper 
 
-"Blast waves and reverse shocks: from ultra-relativistic GRBs to moderately relativistic X-ray binaries"
-James H. Matthews, Alex J. Cooper, Lauren Rhodes, Katherine Savard, Rob Fender, Francesco Carotenuto, Fraser J. Cowie, Emma L. Elley, Joe Bright, Andrew K. Hughes and Sara E. Motta
-Submitted to MNRAS. 
+**"Blast waves and reverse shocks: from ultra-relativistic GRBs to moderately relativistic X-ray binaries"**, _James H. Matthews, Alex J. Cooper, Lauren Rhodes, Katherine Savard, Rob Fender, Francesco Carotenuto, Fraser J. Cowie, Emma L. Elley, Joe Bright, Andrew K. Hughes and Sara E. Motta_, Submitted to MNRAS. 
 
 Usage 
 =========
